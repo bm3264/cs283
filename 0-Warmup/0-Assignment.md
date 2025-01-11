@@ -35,7 +35,10 @@ Please provide answers to these questions using markdown notation and place them
 
 
 3. Please provide a link to the repository you are using for this class.
+https://github.com/bm3264/cs283.git
 
 4. Briefly describe what you want to get out of this class.
+I would like to get a better understanding of C
 
 5. Briefly describe any concerns you might be having with being successful in this class (if any).
+I am generally not great at coding so I'm hoping this class will get me better at that, specifically in C
