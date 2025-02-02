@@ -1,0 +1,16 @@
+1. Yes, I think it was a good idea, because it improves the code's reusability. Allowing multiple functions to query student data consistently without any reduntant or unnecessary code.
+
+2. This could be problematic because local variables are stored on the stack, and their memory is deallocated when the function exits. The pointer could reference invalid memory
+which could lead to undefined behavior.
+
+3. This implementation works because malloc() allocates memory on the heap, which persists after the function returns. However, it could include some potential memory leaks if not
+handled correctly.
+
+4. The file size reported by ls increased because each student record occupies a specific byte offset based on the ID. When a student with a higher ID number is added, the file needs
+to grow to accommodate for that offeset, even if the records are empty. However, du reports the actual disk usage which remains small because Linux supports sparse files.
+
+5. The disk storage remained at 4K because the file size was within a single filesystem block. Sparse files do not allocate disk blocks for empty data regions. So when the file size
+exceeds 4K after adding student ID 64, a second block was created, increasing the disk usage to 8K
+
+6. The file size increased to 6400000 because the record for student ID 99999 is located at a large byte offset. But, since linux does not allocate disk space for empty regions, the
+actual storage used only increased by one more block which brought the total to 12K.
