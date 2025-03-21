@@ -179,3 +179,46 @@ int execute_pipeline(command_list_t *clist)
 
     return OK;
 }
+
+int build_cmd_list(char *cmd_line, command_list_t *clist) {
+    if (!cmd_line || !clist) return ERR_CMD_OR_ARGS_TOO_BIG;
+
+    char *saveptr;
+    char *token = strtok_r(cmd_line, PIPE_STRING, &saveptr);
+    int count = 0;
+
+    while (token != NULL) {
+        if (count >= CMD_MAX) return ERR_TOO_MANY_COMMANDS;
+
+        // Trim leading/trailing whitespace
+        while (*token == SPACE_CHAR) token++;
+        char *end = token + strlen(token) - 1;
+        while (end > token && *end == SPACE_CHAR) *end-- = '\0';
+
+        // Call build_cmd_buff on each command segment
+        int rc = build_cmd_buff(token, &clist->commands[count]);
+        if (rc != OK) return rc;
+
+        count++;
+        token = strtok_r(NULL, PIPE_STRING, &saveptr);
+    }
+
+    clist->num = count;
+    return OK;
+}
+
+int build_cmd_buff(char *cmd_line, cmd_buff_t *cmd_buff) {
+    cmd_buff->_cmd_buffer = strdup(cmd_line);  // Allocate and copy input
+    if (!cmd_buff->_cmd_buffer)
+        return ERR_MEMORY;
+
+    cmd_buff->argc = 0;
+    char *token = strtok(cmd_buff->_cmd_buffer, " ");
+    while (token != NULL && cmd_buff->argc < CMD_ARGV_MAX - 1) {
+        cmd_buff->argv[cmd_buff->argc++] = token;
+        token = strtok(NULL, " ");
+    }
+    cmd_buff->argv[cmd_buff->argc] = NULL;
+
+    return OK;
+}

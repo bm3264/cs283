@@ -446,7 +446,7 @@ int rsh_execute_pipeline(int cli_sock, command_list_t *clist) {
                 close(pipes[j][1]);
             }
 
-            execvp(clist->commands[i].exe, clist->commands[i].args);
+            execvp(clist->commands[i].argv[0], clist->commands[i].argv);
             perror("execvp");
             exit(EXIT_FAILURE);
         }
